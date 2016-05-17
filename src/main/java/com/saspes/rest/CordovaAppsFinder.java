@@ -12,7 +12,7 @@ package com.saspes.rest;
 public class CordovaAppsFinder {
     
     // test only first app in page
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     
     public static final String URL = "https://m.apkpure.com";
     public static final String URL_APP = URL + "/apkpure/";
