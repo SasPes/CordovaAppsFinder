@@ -44,7 +44,14 @@ public class Utils {
 
         System.out.println("[ Saved ] " + targetFile.getAbsolutePath());
 
-        return UnApk7z.unzip(targetFile.getPath());
+        if (UnApk7z.unzip(targetFile.getPath())) {
+            System.out.println("*********************************************************");
+            System.out.println("* " + apk.getName() + " (" + apk.getAppId() + " ) is Cordova/PhoneGap app");
+            System.out.println("*********************************************************");
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static Document getApkPage(String link) throws ParseException, IOException {
