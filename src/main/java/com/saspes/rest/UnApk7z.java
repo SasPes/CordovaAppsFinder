@@ -32,7 +32,14 @@ public class UnApk7z {
             // Getting simple interface of the archive inArchive
             ISimpleInArchive simpleInArchive = inArchive.getSimpleInterface();
 
+            System.out.println("   Size   | Compr.Sz. | Filename");
+            System.out.println("----------+-----------+---------");
+
             for (ISimpleInArchiveItem item : simpleInArchive.getArchiveItems()) {
+                System.out.println(String.format("%9s | %9s | %s", // 
+                        item.getSize(),
+                        item.getPackedSize(),
+                        item.getPath()));
 
                 String name = item.getPath().substring(item.getPath().lastIndexOf("\\") + 1);
                 if (name.equals("cordova.js") || name.equals("phonegap.js")) {
