@@ -28,7 +28,7 @@ public class Utils {
 
     public static boolean checkCordova(Apk apk) throws IOException {
         System.out.println("[ Downloading ... ] " + apk.getAppId());
-        File targetFile = new File("tempapk\\" + apk.getAppId() + ".apk");
+        File targetFile = new File("tempapk/" + apk.getAppId() + ".apk");
 
         targetFile.getParentFile().mkdirs();
 
