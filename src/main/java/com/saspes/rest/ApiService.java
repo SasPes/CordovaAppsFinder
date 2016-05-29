@@ -101,7 +101,7 @@ public class ApiService {
 
         // download
         Elements downloadApp = docApp.select("body div.main div.details div.down-warp div a");
-        String download = downloadApp.attr("href");
+        String download = URL + downloadApp.attr("href");
 
         // name
         Elements nameApp = docApp.select("body div.main div.details div.p10 dl dd h1");
