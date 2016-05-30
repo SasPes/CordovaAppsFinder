@@ -8,6 +8,10 @@ package com.saspes.rest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.apache.http.HttpEntity;
 import org.apache.http.ParseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -26,8 +30,11 @@ public class Utils {
 
     public static Auth auth = new Auth();
 
+    public static PrintStream out = null;
+    private static final String WEBINF = "WEB-INF";
+
     public static boolean checkCordova(Apk apk) throws IOException {
-        System.out.println("[ Downloading ... ] " + apk.getAppId());
+        System.out.println("[ " + Utils.getDate() + " ] [ Downloading ... ] " + apk.getAppId());
         File targetFile = new File("tempapk/" + apk.getAppId() + ".apk");
 
         targetFile.getParentFile().mkdirs();
@@ -42,11 +49,11 @@ public class Utils {
             }
         }
 
-        System.out.println("[ Saved ] " + targetFile.getAbsolutePath());
+        System.out.println("[ " + Utils.getDate() + " ] [ Saved ] " + targetFile.getAbsolutePath());
 
         if (UnApk7z.unzip(targetFile.getPath())) {
             System.out.println("*********************************************************");
-            System.out.println("* " + apk.getName() + " (" + apk.getAppId() + " ) is Cordova/PhoneGap app");
+            System.out.println("* " + apk.getName() + " (" + apk.getAppId() + " ) is Cordova/PhoneGap app [ " + Utils.getDate() + " ] ");
             System.out.println("*********************************************************");
             return true;
         } else {
@@ -55,9 +62,22 @@ public class Utils {
     }
 
     public static Document getApkPage(String link) throws ParseException, IOException {
+        if (out == null) {
+            out = new PrintStream(new FileOutputStream(getWebRootPath() + "output.log"));
+            System.setOut(out);
+            System.out.println(""
+                    + "                                                                                                _                                     \n"
+                    + " _____              _                   _____                   _____  _         _             | |   _____            _____           \n"
+                    + "|     | ___  ___  _| | ___  _ _  ___   |  _  | ___  ___  ___   |   __||_| ___  _| | ___  ___   | |  |   __| ___  ___ |  _  | ___  ___ \n"
+                    + "|   --|| . ||  _|| . || . || | || .'|  |     || . || . ||_ -|  |   __|| ||   || . || -_||  _|  | |  |__   || .'||_ -||   __|| -_||_ -|\n"
+                    + "|_____||___||_|  |___||___| \\_/ |__,|  |__|__||  _||  _||___|  |__|   |_||_|_||___||___||_|    | |  |_____||__,||___||__|   |___||___|\n"
+                    + "                                              |_|  |_|                                         |_|                                    \n"
+                    + "");
+        }
+
         HttpGet httpGetApp = new HttpGet(link);
         CloseableHttpResponse httpGetAppRes = auth.getHttpClient().execute(httpGetApp, auth.getHttpContext());
-        System.out.println("[ " + httpGetAppRes.getStatusLine() + "] " + link);
+        System.out.println("[ " + Utils.getDate() + " ] [ " + httpGetAppRes.getStatusLine() + "] " + link);
 
         HttpEntity entityApp = httpGetAppRes.getEntity();
         String entityContentsApp = EntityUtils.toString(entityApp);
@@ -66,4 +86,17 @@ public class Utils {
         return docApp;
     }
 
+    public static String getWebRootPath() {
+        String filePath = "";
+        URL url = Utils.class.getResource("Utils.class");
+        String className = url.getFile();
+        filePath = className.substring(0, className.indexOf(WEBINF));
+        return filePath;
+    }
+
+    public static String getDate() {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.dd.MM hh:mm:ss");
+        return sdf.format(date);
+    }
 }

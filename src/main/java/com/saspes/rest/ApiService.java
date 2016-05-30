@@ -39,7 +39,7 @@ public class ApiService {
         HttpGet httpGet = new HttpGet(URL_APPS + page);
 
         CloseableHttpResponse apps = Utils.auth.getHttpClient().execute(httpGet, Utils.auth.getHttpContext());
-        System.out.println("[ " + apps.getStatusLine() + "] " + URL_APPS + page);
+        System.out.println("[ " + Utils.getDate() + " ] [ " + apps.getStatusLine() + "] " + URL_APPS + page);
 
         HttpEntity entity = apps.getEntity();
         String entityContents = EntityUtils.toString(entity);
@@ -156,7 +156,7 @@ public class ApiService {
             if (!SevenZip.isInitializedSuccessfully()) {
                 SevenZip.initSevenZipFromPlatformJAR();
             }
-            System.out.println("7-Zip-JBinding library was initialized");
+            System.out.println("[" + Utils.getDate() + "] 7-Zip-JBinding library was initialized");
         } catch (SevenZipNativeInitializationException e) {
             e.printStackTrace();
             return "ERRRO: 7-Zip-JBinding library was initialized";
