@@ -75,6 +75,10 @@ public class ApiService {
             Elements img = apkApp.select("img");
             String image = img.attr("data-original");
 
+            docApp = Utils.getApkPage(URL + download);
+            downloadApp = docApp.select("#download_link");
+            download = downloadApp.attr("href");
+
             apkList.add(new Apk(name, link, appId, download, image));
 
             if (DEBUG) {
@@ -103,6 +107,11 @@ public class ApiService {
         Elements downloadApp = docApp.select("body div.main div.details div.down-warp div a");
         String download = URL + downloadApp.attr("href");
 
+        if (download.equals("#download")) {
+            downloadApp = docApp.select("body div.main div.versions dl dd:nth-child(2) div a");
+            download = downloadApp.attr("href");
+        }
+
         // name
         Elements nameApp = docApp.select("body div.main div.details div.p10 dl dd h1");
         String name = nameApp.text();
@@ -110,6 +119,10 @@ public class ApiService {
         // image 
         Elements imageApp = docApp.select("body div.main div.details div.p10 dl dt img");
         String image = imageApp.attr("src");
+
+        docApp = Utils.getApkPage(download);
+        downloadApp = docApp.select("#download_link");
+        download = downloadApp.attr("href");
 
         Apk apk = new Apk(name, link, appId, download, image);
         return new Gson().toJson(apk);

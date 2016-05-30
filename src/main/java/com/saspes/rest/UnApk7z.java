@@ -46,8 +46,7 @@ public class UnApk7z {
                             item.getPath()));
                 }
 
-                String name = item.getPath().substring(item.getPath().lastIndexOf("/") + 1);
-                if (name.equals("cordova.js") || name.equals("phonegap.js")) {
+                if (item.getPath().endsWith("cordova.js") || item.getPath().endsWith("phonegap.js")) {
                     return true;
                 }
             }
