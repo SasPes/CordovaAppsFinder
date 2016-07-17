@@ -33,9 +33,9 @@ var init = function () {
                 appsCount++;
 
                 if (appsJson[i][j].android_url.includes("play.google.com")) {
-                    appsAndroidCount++;            
+                    appsAndroidCount++;
                     var android = appsJson[i][j].android_url;
-                    
+
                     var appDiv =
                             "<a href='" + android + "' target='_blank'>" +
                             appsJson[i][j].app_name +
@@ -48,8 +48,31 @@ var init = function () {
 
         var divCount = document.getElementById("appsCount");
         divCount.innerHTML = divCount.innerHTML + appsCount;
-        
+
         var divAndroidCount = document.getElementById("appsAndroidCount");
         divAndroidCount.innerHTML = divAndroidCount.innerHTML + appsAndroidCount;
+    });
+};
+
+var generateAndroidJson = function () {
+    loadJSON(function (apps) {
+        var appsJson = JSON.parse(apps);
+        var appJson = "[";
+
+        for (var i = 0; i < appsJson.length; i++) {
+            for (var j = 0; j < appsJson[i].length; j++) {
+                //console.log(appsJson[i][j]);
+                if (appsJson[i][j].android_url.includes("play.google.com")) {
+                    appJson = appJson +
+                            "{\"name\": \"" + appsJson[i][j].app_name.replace(/\"/g, "") + "\", " +
+                            "\"id\": \"" + getAndroidId(appsJson[i][j].android_url) + "\"},";
+                }
+            }
+        }
+        appJson = appJson.substring(0, appJson.length - 1) + "]";
+
+        var url = 'data:text/json;charset=utf8,' + encodeURIComponent(appJson);
+        window.open(url, '_blank');
+        window.focus();
     });
 };
