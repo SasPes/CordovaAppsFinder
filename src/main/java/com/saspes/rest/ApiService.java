@@ -216,7 +216,7 @@ public class ApiService {
         JsonArray jsonArray = jsonElement.getAsJsonArray();
         
         for (int i = 0 ; i < jsonArray.size() ; i++) {
-            JsonObject app = jsonArray.get(0).getAsJsonObject();
+            JsonObject app = jsonArray.get(i).getAsJsonObject();
             String appId = app.get("id").getAsString();
             String appJson = checkApp(appId);
             System.out.println(appJson);
