@@ -1,11 +1,17 @@
 package com.saspes.rest;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import static com.saspes.rest.CordovaAppsFinder.DEBUG;
 import static com.saspes.rest.CordovaAppsFinder.URL;
 import static com.saspes.rest.CordovaAppsFinder.URL_APP;
 import static com.saspes.rest.CordovaAppsFinder.URL_APPS;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -21,15 +27,20 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
+import javax.servlet.ServletContext;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import net.sf.sevenzipjbinding.SevenZip;
 import net.sf.sevenzipjbinding.SevenZipNativeInitializationException;
 import org.jsoup.nodes.Element;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Component
 @Path("/api")
 public class ApiService {
+    
+    @Autowired
+    ServletContext servletContext;
 
     @GET
     @Path("/listapps/{page}")
@@ -192,4 +203,26 @@ public class ApiService {
         return new Gson().toJson(apkCordova);
     }
 
+    @GET
+    @Path("/checkionicapps")
+    public @ResponseBody
+    @Produces("application/json")
+    String checkIonicApps() throws FileNotFoundException, IOException, URISyntaxException {
+        String appsAll = "";
+        String pathToJson = servletContext.getRealPath("/ionic/apps-android.json");
+
+        JsonParser parser = new JsonParser();
+        JsonElement jsonElement = parser.parse(new FileReader(pathToJson));
+        JsonArray jsonArray = jsonElement.getAsJsonArray();
+        
+        for (int i = 0 ; i < jsonArray.size() ; i++) {
+            JsonObject app = jsonArray.get(0).getAsJsonObject();
+            String appId = app.get("id").getAsString();
+            String appJson = checkApp(appId);
+            System.out.println(appJson);
+            appsAll = appsAll + appJson + ",\n";
+        }
+        
+        return appsAll;
+    }
 }
