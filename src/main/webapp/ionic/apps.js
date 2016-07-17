@@ -1,4 +1,5 @@
 var appsCount = 0;
+var appsAndroidCount = 0;
 
 var loadJSON = function (callback) {
     var xobj = new XMLHttpRequest();
@@ -32,7 +33,9 @@ var init = function () {
                 appsCount++;
 
                 if (appsJson[i][j].android_url.includes("play.google.com")) {
+                    appsAndroidCount++;            
                     var android = appsJson[i][j].android_url;
+                    
                     var appDiv =
                             "<a href='" + android + "' target='_blank'>" +
                             appsJson[i][j].app_name +
@@ -45,5 +48,8 @@ var init = function () {
 
         var divCount = document.getElementById("appsCount");
         divCount.innerHTML = divCount.innerHTML + appsCount;
+        
+        var divAndroidCount = document.getElementById("appsAndroidCount");
+        divAndroidCount.innerHTML = divAndroidCount.innerHTML + appsAndroidCount;
     });
 };
