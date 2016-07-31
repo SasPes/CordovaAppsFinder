@@ -29,7 +29,8 @@ URL: http://localhost:8080/CordovaAppsFinder/rest/api/checkapp/com.lgi.myupc.ch
 
 ### Check ionic apps  
 http://localhost:8080/CordovaAppsFinder/rest/api/checkionicapps  
-http://localhost:8080/CordovaAppsFinder/ionicapps.json  
+http://localhost:8080/CordovaAppsFinder/ionic/ionicapps.json  
+http://localhost:8080/CordovaAppsFinder/ionic/ioniccount.json  
 
 ### Ionic apps showcase  
 http://localhost:8080/CordovaAppsFinder/ionic-apps.html  
