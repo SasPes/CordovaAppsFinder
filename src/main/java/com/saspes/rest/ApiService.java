@@ -53,7 +53,7 @@ public class ApiService {
         HttpGet httpGet = new HttpGet(URL_APPS + page);
 
         CloseableHttpResponse apps = Utils.auth.getHttpClient().execute(httpGet, Utils.auth.getHttpContext());
-        System.out.println("[ " + Utils.getDate() + " ] [ " + apps.getStatusLine() + "] " + URL_APPS + page);
+        System.out.println("[ " + Utils.getDate() + " ] [ " + apps.getStatusLine() + " ] " + URL_APPS + page);
 
         HttpEntity entity = apps.getEntity();
         String entityContents = EntityUtils.toString(entity);

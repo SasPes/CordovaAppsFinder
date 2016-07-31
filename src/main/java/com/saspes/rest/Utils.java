@@ -48,6 +48,9 @@ public class Utils {
                     entity.writeTo(outstream);
                 }
             }
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
         }
 
         System.out.println("[ " + Utils.getDate() + " ] [ Saved ] " + targetFile.getAbsolutePath());
@@ -80,7 +83,7 @@ public class Utils {
 
         HttpGet httpGetApp = new HttpGet(link);
         CloseableHttpResponse httpGetAppRes = auth.getHttpClient().execute(httpGetApp, auth.getHttpContext());
-        System.out.println("[ " + Utils.getDate() + " ] [ " + httpGetAppRes.getStatusLine() + "] " + link);
+        System.out.println("[ " + Utils.getDate() + " ] [ " + httpGetAppRes.getStatusLine() + " ] " + link);
 
         HttpEntity entityApp = httpGetAppRes.getEntity();
         String entityContentsApp = EntityUtils.toString(entityApp);
