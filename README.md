@@ -26,3 +26,17 @@ URL: http://localhost:8080/CordovaAppsFinder/rest/api/checkapp/com.facebook.lite
 ### Check app (is a Cordova app)  
 Method: GET  
 URL: http://localhost:8080/CordovaAppsFinder/rest/api/checkapp/com.lgi.myupc.ch  
+
+### Check ionic apps  
+http://localhost:8080/CordovaAppsFinder/rest/api/checkionicapps  
+http://localhost:8080/CordovaAppsFinder/ionicapps.json  
+
+### Ionic apps showcase  
+http://localhost:8080/CordovaAppsFinder/ionic-apps.html  
+
+### Output log file  
+http://localhost:8080/CordovaAppsFinder/output.log  
+
+### URL-s  
+https://m.apkpure.com/app  
+http://sevenzipjbind.sourceforge.net/first_steps.html  

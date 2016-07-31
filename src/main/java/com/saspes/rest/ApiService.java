@@ -10,7 +10,10 @@ import static com.saspes.rest.CordovaAppsFinder.DEBUG;
 import static com.saspes.rest.CordovaAppsFinder.URL;
 import static com.saspes.rest.CordovaAppsFinder.URL_APP;
 import static com.saspes.rest.CordovaAppsFinder.URL_APPS;
+import static com.saspes.rest.Utils.getWebRootPath;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -38,7 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Component
 @Path("/api")
 public class ApiService {
-    
+
     @Autowired
     ServletContext servletContext;
 
@@ -214,7 +217,7 @@ public class ApiService {
         JsonParser parser = new JsonParser();
         JsonElement jsonElement = parser.parse(new FileReader(pathToJson));
         JsonArray jsonArray = jsonElement.getAsJsonArray();
-        
+
         for (int i = 0 ; i < jsonArray.size() ; i++) {
             JsonObject app = jsonArray.get(i).getAsJsonObject();
             String appId = app.get("id").getAsString();
@@ -222,7 +225,31 @@ public class ApiService {
             //System.out.println(appJson);
             appsAll = appsAll + appJson + ",\n";
         }
-        
+
+        // fix json
+        appsAll = "[" + appsAll.substring(0, appsAll.length() - 2) + "]";
+
+        // save all to json file
+        File file = new File(getWebRootPath() + "ionicapps.json");
+        file.getParentFile().mkdirs();
+
+        try (FileOutputStream fop = new FileOutputStream(file)) {
+
+            // if file doesn't exists, then create it
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            // get the content in bytes
+            byte[] contentInBytes = appsAll.getBytes();
+
+            fop.write(contentInBytes);
+            fop.flush();
+            fop.close();
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+
         return appsAll;
     }
 }
