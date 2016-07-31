@@ -90,7 +90,7 @@ public class ApiService {
             downloadApp = docApp.select("#download_link");
             download = downloadApp.attr("href");
 
-            apkList.add(new Apk(name, link, appId, download, image));
+            apkList.add(new Apk(name, link, appId, download, image, null));
 
             if (DEBUG) {
                 break;
@@ -135,7 +135,7 @@ public class ApiService {
         downloadApp = docApp.select("#download_link");
         download = downloadApp.attr("href");
 
-        Apk apk = new Apk(name, link, appId, download, image);
+        Apk apk = new Apk(name, link, appId, download, image, null);
         return new Gson().toJson(apk);
     }
 

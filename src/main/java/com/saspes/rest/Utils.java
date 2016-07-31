@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import org.apache.http.HttpEntity;
 import org.apache.http.ParseException;
@@ -51,7 +52,9 @@ public class Utils {
 
         System.out.println("[ " + Utils.getDate() + " ] [ Saved ] " + targetFile.getAbsolutePath());
 
-        if (UnApk7z.unzip(targetFile.getPath())) {
+        ArrayList<Plugin> plugins = UnApk7z.unzip(targetFile.getPath());
+        if (plugins != null) {
+            apk.setPlugins(plugins);
             System.out.println("*********************************************************");
             System.out.println("* " + apk.getName() + " (" + apk.getAppId() + " ) is Cordova/PhoneGap app [ " + Utils.getDate() + " ] ");
             System.out.println("*********************************************************");

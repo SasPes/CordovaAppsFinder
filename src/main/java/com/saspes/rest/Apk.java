@@ -5,6 +5,8 @@
  */
 package com.saspes.rest;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author SasPes
@@ -16,16 +18,18 @@ public class Apk {
     String appId;
     String download;
     String image;
+    ArrayList<Plugin> plugins;
 
     public Apk() {
     }
 
-    public Apk(String name, String link, String appId, String download, String image) {
+    public Apk(String name, String link, String appId, String download, String image, ArrayList<Plugin> plugins) {
         this.name = name;
         this.link = link;
         this.appId = appId;
         this.download = download;
         this.image = image;
+        this.plugins = plugins;
     }
 
     public String getName() {
@@ -66,6 +70,14 @@ public class Apk {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public ArrayList<Plugin> getPlugins() {
+        return plugins;
+    }
+
+    public void setPlugins(ArrayList<Plugin> plugins) {
+        this.plugins = plugins;
     }
 
     @Override

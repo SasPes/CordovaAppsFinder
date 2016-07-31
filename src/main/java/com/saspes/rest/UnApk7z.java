@@ -5,9 +5,15 @@
  */
 package com.saspes.rest;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import static com.saspes.rest.CordovaAppsFinder.DEBUG;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 import net.sf.sevenzipjbinding.IInArchive;
 import net.sf.sevenzipjbinding.SevenZip;
 import net.sf.sevenzipjbinding.SevenZipException;
@@ -22,7 +28,7 @@ import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 public class UnApk7z {
 
     // list unzip apk
-    public static boolean unzip(String path) {
+    public static ArrayList<Plugin> unzip(String path) {
         RandomAccessFile randomAccessFile = null;
         IInArchive inArchive = null;
         try {
@@ -38,6 +44,9 @@ public class UnApk7z {
                 System.out.println("----------+-----------+---------");
             }
 
+            boolean cordova = false;
+            boolean cordovaPlugins = false;
+            ArrayList<Plugin> plugins = new ArrayList<>();
             for (ISimpleInArchiveItem item : simpleInArchive.getArchiveItems()) {
                 if (DEBUG) {
                     System.out.println(String.format("%9s | %9s | %s", // 
@@ -47,9 +56,36 @@ public class UnApk7z {
                 }
 
                 if (item.getPath().endsWith("cordova.js") || item.getPath().endsWith("phonegap.js")) {
-                    return true;
+                    cordova = true;
+                }
+
+                if (item.getPath().endsWith("cordova_plugins.js")) {
+                    cordovaPlugins = true;
+                    String cordovaPluginsFile = ArchieveInputStreamHandler.readFile(new ArchieveInputStreamHandler(item).getInputStream(), 1000);
+
+                    String metadata = "module.exports.metadata";
+                    String jsonPluginsString = cordovaPluginsFile.substring(cordovaPluginsFile.indexOf(metadata));
+                    jsonPluginsString = jsonPluginsString.substring(
+                            jsonPluginsString.indexOf("{"),
+                            jsonPluginsString.indexOf("}") + 1
+                    );
+
+                    JsonParser jsonParser = new JsonParser();
+                    JsonObject jsonObject = (JsonObject) jsonParser.parse(jsonPluginsString);
+
+                    Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
+                    for (Map.Entry<String, JsonElement> entry : entrySet) {
+                        plugins.add(new Plugin(entry.getKey(), entry.getValue().getAsString()));
+                    }
+
+                }
+
+                if (cordova && cordovaPlugins) {
+                    return plugins;
                 }
             }
+
+            return null;
         } catch (Exception e) {
             System.err.println("Error occurs: " + e);
         } finally {
@@ -69,7 +105,7 @@ public class UnApk7z {
             }
         }
 
-        return false;
+        return null;
     }
 
 }
